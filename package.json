@@ -1,0 +1,42 @@
+{
+  "name": "xyai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "一个支持中转站模型问答、识图和图片生成的网页应用",
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "clsx": "2.1.1",
+    "lucide-react": "1.14.0",
+    "nanoid": "5.1.11",
+    "next": "16.2.4",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "react-markdown": "10.1.0",
+    "rehype-highlight": "7.0.2",
+    "remark-gfm": "4.0.1",
+    "zod": "4.4.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.59.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@types/node": "25.6.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.4",
+    "jsdom": "29.1.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.5"
+  },
+  "overrides": {
+    "postcss": "8.5.13"
+  }
+}

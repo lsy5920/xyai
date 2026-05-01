@@ -1,0 +1,31 @@
+# 依赖目录
+node_modules/
+
+# 构建产物
+.next/
+out/
+dist/
+coverage/
+
+# 本地环境和密钥
+.env
+.env.*
+!.env.example
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 编辑器配置
+.idea/
+.vscode/
+
+# 部署平台本地目录
+.vercel/

@@ -1,0 +1,704 @@
+/* 全局盒模型，用途：让尺寸计算更稳定，避免移动端溢出。 */
+* {
+  box-sizing: border-box;
+}
+
+/* 页面根节点，用途：铺满浏览器高度。 */
+html,
+body {
+  min-height: 100%;
+}
+
+/* 页面主体，用途：设置基础字体、颜色和背景。 */
+body {
+  margin: 0;
+  background: #f5f7f4;
+  color: #1f2723;
+  font-family:
+    "Microsoft YaHei",
+    "PingFang SC",
+    "Noto Sans CJK SC",
+    system-ui,
+    sans-serif;
+}
+
+/* 通用按钮和输入，用途：继承字体，避免控件样式割裂。 */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* 通用按钮，用途：提供稳定点击区域。 */
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+/* 禁用按钮，用途：阻止重复提交时给出视觉状态。 */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+/* 图片基础样式，用途：防止图片撑破容器。 */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* 应用外壳，用途：桌面端左右分栏。 */
+.appShell {
+  display: grid;
+  grid-template-columns: 292px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* 侧边栏，用途：展示历史会话。 */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100vh;
+  border-right: 1px solid #dfe6dc;
+  background: #fbfcfa;
+  padding: 18px;
+}
+
+/* 侧边栏顶部，用途：放新建按钮和移动端收起按钮。 */
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* 会话列表，用途：让历史记录可以滚动。 */
+.conversationList {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+/* 会话条目，用途：排列标题和删除按钮。 */
+.conversationItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  gap: 6px;
+  align-items: stretch;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+}
+
+/* 当前会话，用途：突出正在打开的记录。 */
+.conversationItem.active {
+  border-color: #96b6a0;
+  background: #eef6ef;
+}
+
+/* 会话按钮，用途：让整行标题可点击。 */
+.conversationButton {
+  min-width: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #24312b;
+  padding: 10px;
+  text-align: left;
+}
+
+/* 会话标题，用途：单行显示避免撑开侧边栏。 */
+.conversationButton span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 会话时间，用途：提供最近更新时间。 */
+.conversationButton small {
+  display: block;
+  margin-top: 4px;
+  color: #6a756d;
+  font-size: 12px;
+}
+
+/* 主区域，用途：承载配置栏和工作区。 */
+.mainArea {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+
+/* 顶部栏，用途：显示应用名称和移动端菜单。 */
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 标题，用途：保持工具型界面的紧凑层级。 */
+.topBar h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+/* 副标题，用途：简短说明当前工作台。 */
+.topBar p {
+  margin: 4px 0 0;
+  color: #69746c;
+  font-size: 13px;
+}
+
+/* 配置栏，用途：填写中转站地址和密钥。 */
+.configBar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) minmax(180px, 0.9fr) auto auto;
+  gap: 10px;
+  align-items: end;
+  border: 1px solid #dfe6dc;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+/* 工作区，用途：桌面端聊天和工具分栏。 */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  gap: 14px;
+  min-height: 0;
+}
+
+/* 聊天面板，用途：包含消息列表和输入区。 */
+.chatPanel {
+  display: flex;
+  min-height: calc(100vh - 180px);
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #dfe6dc;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+/* 工具面板，用途：包含参数和图片功能。 */
+.toolPanel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 设置面板和图片面板，用途：形成清晰的工具区域。 */
+.settingsPanel,
+.imagePanel {
+  border: 1px solid #dfe6dc;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 14px;
+}
+
+/* 面板标题，用途：排列标题和模型选择。 */
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #edf1eb;
+  padding: 14px;
+}
+
+/* 面板标题文字，用途：保持紧凑清晰。 */
+.panelHeader h2,
+.settingsPanel h2,
+.imagePanel h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+/* 面板副文本，用途：展示当前会话标题。 */
+.panelHeader p {
+  margin: 4px 0 0;
+  color: #69746c;
+  font-size: 13px;
+}
+
+/* 字段容器，用途：统一标签和输入控件布局。 */
+.field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 宽字段，用途：让地址输入框占更多空间。 */
+.wideField {
+  min-width: 220px;
+}
+
+/* 紧凑字段，用途：限制模型输入宽度。 */
+.compactField {
+  width: min(260px, 46vw);
+}
+
+/* 字段标签，用途：小号显示输入含义。 */
+.field span {
+  color: #4f5d54;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 表单控件，用途：统一输入框视觉。 */
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #ccd8cf;
+  border-radius: 8px;
+  background: #fbfcfa;
+  color: #1f2723;
+  outline: none;
+  padding: 10px 11px;
+}
+
+/* 文本域，用途：允许竖向调整但不横向溢出。 */
+.field textarea,
+.composer textarea {
+  resize: vertical;
+}
+
+/* 表单聚焦，用途：提高键盘操作可见性。 */
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.composer textarea:focus {
+  border-color: #2e8a57;
+  box-shadow: 0 0 0 3px rgba(46, 138, 87, 0.14);
+}
+
+/* 双色列，用途：放尺寸、质量、温度等短字段。 */
+.twoColumn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* 通用主按钮，用途：强调主要动作。 */
+.primaryButton,
+.secondaryButton,
+.ghostButton,
+.iconTextButton,
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+/* 主按钮颜色，用途：发送和新建。 */
+.primaryButton {
+  background: #246b45;
+  color: #ffffff;
+  padding: 0 14px;
+}
+
+/* 次按钮颜色，用途：加载模型和图片操作。 */
+.secondaryButton {
+  background: #355c7d;
+  color: #ffffff;
+  padding: 0 14px;
+}
+
+/* 弱按钮颜色，用途：清理等低风险操作。 */
+.ghostButton {
+  border: 1px solid #ccd8cf;
+  background: #ffffff;
+  color: #39473f;
+  padding: 0 12px;
+}
+
+/* 图标文字按钮，用途：上传图片等操作。 */
+.iconTextButton {
+  border: 1px solid #cfd8d1;
+  background: #f8faf7;
+  color: #26332b;
+  padding: 0 12px;
+}
+
+/* 纯图标按钮，用途：菜单、删除和收起。 */
+.iconButton {
+  width: 40px;
+  min-width: 40px;
+  background: #f0f4ef;
+  color: #26332b;
+}
+
+/* 危险按钮，用途：删除对话。 */
+.dangerButton {
+  color: #9d2f2f;
+}
+
+/* 满宽按钮，用途：工具面板中的操作按钮。 */
+.fullButton {
+  width: 100%;
+}
+
+/* 提示条，用途：显示错误或成功消息。 */
+.notice {
+  border: 1px solid #e5cc8d;
+  border-radius: 8px;
+  background: #fff8e5;
+  color: #5c4617;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+/* 消息列表，用途：承载滚动聊天内容。 */
+.messageList {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* 消息行，用途：头像和正文横向排列。 */
+.message {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+/* 用户消息，用途：轻微区分发送方。 */
+.userMessage .messageBody {
+  background: #eef6ef;
+  border-color: #cfe2d3;
+}
+
+/* 模型消息，用途：保持阅读区清爽。 */
+.assistantMessage .messageBody {
+  background: #ffffff;
+  border-color: #e2e8e2;
+}
+
+/* 消息头像，用途：稳定标识角色。 */
+.messageAvatar {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #223b31;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* 消息正文，用途：限制文本宽度和代码块溢出。 */
+.messageBody {
+  min-width: 0;
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 12px;
+  line-height: 1.65;
+}
+
+/* 消息段落，用途：控制上下间距。 */
+.messageBody p {
+  margin: 0 0 10px;
+}
+
+/* 最后一段，用途：避免底部多余空白。 */
+.messageBody p:last-child {
+  margin-bottom: 0;
+}
+
+/* 图片缩略图网格，用途：展示随消息发送的图片。 */
+.thumbGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* 缩略图，用途：固定比例避免消息跳动。 */
+.thumbGrid img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* 空状态，用途：无消息时显示入口状态。 */
+.emptyState {
+  display: flex;
+  min-height: 260px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #627066;
+}
+
+/* 输入区，用途：固定在聊天面板底部。 */
+.composer {
+  border-top: 1px solid #edf1eb;
+  padding: 12px;
+}
+
+/* 输入框，用途：发送多行问题。 */
+.composer textarea {
+  width: 100%;
+  min-height: 96px;
+  border: 1px solid #ccd8cf;
+  border-radius: 8px;
+  background: #fbfcfa;
+  color: #1f2723;
+  outline: none;
+  padding: 11px;
+}
+
+/* 输入区按钮行，用途：排列上传和发送按钮。 */
+.composerActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* 附件行，用途：展示待发送图片。 */
+.attachmentRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* 附件条目，用途：图片和删除按钮叠放。 */
+.attachmentItem {
+  position: relative;
+  width: 74px;
+  height: 74px;
+}
+
+/* 附件图片，用途：固定尺寸展示。 */
+.attachmentItem img {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #d7e0d8;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* 附件删除按钮，用途：移除待发送图片。 */
+.attachmentItem button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(31, 39, 35, 0.78);
+  color: #ffffff;
+}
+
+/* 工具分块，用途：分隔图片生成和编辑。 */
+.imageToolBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  border-top: 1px solid #edf1eb;
+  padding-top: 14px;
+}
+
+/* 结果网格，用途：展示生成和编辑后的图片。 */
+.resultGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 10px;
+}
+
+/* 图片结果容器，用途：显示图片和修订提示词。 */
+.resultGrid figure {
+  margin: 0;
+}
+
+/* 图片结果，用途：固定比例，避免布局跳动。 */
+.resultGrid img,
+.editPreview {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid #d7e0d8;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* 图片说明，用途：展示模型返回的修订提示词。 */
+.resultGrid figcaption {
+  margin-top: 6px;
+  color: #5c675f;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* 隐藏输入框，用途：让自定义按钮触发文件上传。 */
+.hiddenInput {
+  display: none;
+}
+
+/* 代码块容器，用途：放复制按钮和代码。 */
+.codeBlock {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #17211c;
+}
+
+/* 代码块内容，用途：横向滚动长代码。 */
+.codeBlock pre {
+  overflow: auto;
+  margin: 0;
+  padding: 38px 12px 12px;
+  color: #edf5ef;
+}
+
+/* 复制按钮，用途：复制模型回复中的代码。 */
+.copyButton {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-height: 28px;
+  border-radius: 8px;
+  background: #dfe8e1;
+  color: #1f2723;
+  padding: 0 9px;
+  font-size: 12px;
+}
+
+/* 旋转动画，用途：展示加载状态。 */
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+/* 旋转关键帧，用途：让加载图标动起来。 */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 移动端专用元素，用途：桌面端默认隐藏。 */
+.mobileOnly {
+  display: none;
+}
+
+/* 中等屏幕适配，用途：工具面板下移，避免拥挤。 */
+@media (max-width: 1180px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .chatPanel {
+    min-height: 620px;
+  }
+
+  .toolPanel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* 平板和手机适配，用途：配置栏变成单列。 */
+@media (max-width: 860px) {
+  .appShell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: min(86vw, 320px);
+    transform: translateX(-105%);
+    transition: transform 0.2s ease;
+    box-shadow: 16px 0 36px rgba(31, 39, 35, 0.18);
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .mobileOnly {
+    display: inline-flex;
+  }
+
+  .mainArea {
+    padding: 12px;
+  }
+
+  .configBar {
+    grid-template-columns: 1fr;
+  }
+
+  .toolPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .panelHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .compactField {
+    width: 100%;
+  }
+
+  .chatPanel {
+    min-height: 70vh;
+  }
+}
+
+/* 小屏幕适配，用途：按钮和双列控件改为单列。 */
+@media (max-width: 560px) {
+  .topBar h1 {
+    font-size: 20px;
+  }
+
+  .twoColumn {
+    grid-template-columns: 1fr;
+  }
+
+  .composerActions {
+    flex-direction: column;
+  }
+
+  .composerActions .primaryButton,
+  .composerActions .iconTextButton {
+    width: 100%;
+  }
+
+  .message {
+    grid-template-columns: 1fr;
+  }
+
+  .messageAvatar {
+    width: 30px;
+    height: 30px;
+  }
+}
