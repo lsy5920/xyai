@@ -6,6 +6,7 @@ node_modules/
 out/
 dist/
 coverage/
+tsconfig.tsbuildinfo
 
 # 本地环境和密钥
 .env
