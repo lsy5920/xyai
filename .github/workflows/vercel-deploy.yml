@@ -3,7 +3,7 @@ name: 自动部署到 Vercel
 on:
   push:
     branches:
-      - main
+      - "**"
   pull_request:
     branches:
       - main
