@@ -7,8 +7,9 @@
 - 系统：Windows 10 或 Windows 11。
 - 运行环境：Node.js 25.8.0。
 - 包管理器：npm 11.11.0。
-- 部署平台：GitHub 仓库加 Vercel 自动部署。
+- 自动部署：GitHub Actions 加 Vercel。
 - 主要依赖：Next.js 16.2.4、React 19.2.5、TypeScript 6.0.3、lucide-react 1.14.0、zod 4.4.1。
+- 自动部署工具：GitHub Actions 中固定使用 Vercel CLI 53.0.1。
 
 ## 安装部署教程
 1. 打开 PowerShell，进入项目目录：
@@ -46,15 +47,29 @@ git remote add origin 你的仓库地址
 git push -u origin main
 ```
 
-6. 打开 Vercel，选择导入刚刚的 GitHub 仓库。
+6. 打开 Vercel，选择导入刚刚的 GitHub 仓库，创建一个 Vercel 项目。
 
-7. Vercel 会自动识别 Next.js 项目，构建命令保持默认即可：
+7. 在 Vercel 账号设置里创建部署令牌，保存为 GitHub 仓库密钥 `VERCEL_TOKEN`。
+
+8. 在 Vercel 项目设置中找到组织编号和项目编号，分别保存为 GitHub 仓库密钥：
 
 ```text
-npm run build
+VERCEL_ORG_ID
+VERCEL_PROJECT_ID
 ```
 
-8. 部署完成后，打开 Vercel 给出的线上地址。
+9. 打开 GitHub 仓库，进入 `Settings`、`Secrets and variables`、`Actions`，新增上面三个密钥。
+
+10. 以后只要推送到 `main` 分支，GitHub Actions 会自动检查、测试、构建并发布到 Vercel 生产环境。
+
+11. 如果提交到其他分支或发起合并请求，GitHub Actions 会自动发布 Vercel 预览环境，方便先看效果再合并。
+
+## 自动部署说明
+- 自动部署工作流文件在 `.github/workflows/vercel-deploy.yml`。
+- Vercel 构建配置文件在 `vercel.json`。
+- 每次自动部署都会执行 `npm ci`、`npm run lint`、`npm run typecheck`、`npm run test`。
+- 生产环境只在 `main` 分支触发，其他分支触发预览环境。
+- 不要把真实中转站 key 写入 GitHub 密钥。本项目的中转站地址和 key 只保存在使用者自己的浏览器本机。
 
 ## 使用教程
 ### 连接中转站
@@ -90,6 +105,9 @@ npm run build
 ## 项目目录结构
 ```text
 xyai
+├─ .github
+│  └─ workflows
+│     └─ vercel-deploy.yml：GitHub Actions 自动部署流程
 ├─ app
 │  ├─ api
 │  │  ├─ chat
@@ -117,6 +135,7 @@ xyai
 ├─ .gitignore：忽略依赖、构建产物和密钥文件
 ├─ package.json：项目依赖和运行命令
 ├─ tsconfig.json：TypeScript 配置
+├─ vercel.json：Vercel 构建配置
 └─ README.md：项目说明文档
 ```
 
@@ -136,8 +155,12 @@ xyai
 ### 图片编辑失败
 请确认中转站支持图片编辑接口，并尽量上传常见格式图片，例如 png、jpg。
 
-### Vercel 部署失败
+### GitHub Actions 自动部署失败
+请先检查 GitHub 仓库是否配置了 `VERCEL_TOKEN`、`VERCEL_ORG_ID`、`VERCEL_PROJECT_ID` 三个密钥。再打开失败的工作流日志，看是依赖安装、代码检查、测试、构建还是 Vercel 发布失败。
+
+### Vercel 构建失败
 请先在本地运行 `npm run build`，根据报错修复后再推送到 GitHub。还要确认仓库里没有提交 `.env`、本地密钥或 `node_modules`。
 
 ## 更新日志
 2026-05-01 13:03 【初次发布】完成小亦模型工作台核心功能开发，支持中转站配置、模型列表、文字问答、识图、图片生成、图片编辑、本机历史会话、移动端适配和 Vercel 部署文档
+2026-05-01 13:59 【新增】新增 GitHub Actions 自动部署流程和 Vercel 构建配置，推送 main 分支自动发布生产环境，其他分支自动发布预览环境，同步补充 README 自动部署教程和排查说明
